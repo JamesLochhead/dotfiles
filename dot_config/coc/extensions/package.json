@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "coc-cfn-lint": ">=0.1.1",
+    "coc-json": ">=1.3.4",
+    "coc-pyright": ">=1.1.126",
+    "coc-sh": ">=0.6.0",
+    "coc-yaml": ">=1.3.1"
+  }
+}
