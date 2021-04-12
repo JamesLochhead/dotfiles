@@ -28,9 +28,6 @@ Plug 'thaerkh/vim-indentguides'                  " Indent guides for code blocks
 Plug 'liuchengxu/vista.vim'                      " Python navigation pane. Requries ctags.
 call plug#end()
 
-" Not currently used:
-"Plug 'tmhedberg/SimpylFold'             " Python code folding
-
 " moll/vim-bbye allows buffers to be closed without closing windows, hence
 " keeping vim open when a buffer needs to be closed. The command is :Bd.
 
@@ -53,7 +50,8 @@ set colorcolumn=80,100                         " Column highlighting
 " File-type specific
 " -----------------------------------------------
 
-" Enable the filetype plugin for extra vim config files
+" Enable the filetype plugin for extra vim config files.
+" Currently used for automatic Python docstring folding.
 filetype plugin on
 
 " Sane tabs for YAML
@@ -160,7 +158,7 @@ noremap <Leader>d :windo diffthis
 noremap <Leader>e :diffoff
 
 " Current column highlight
-noremap <Leader>c :set cursorcolumn!
+noremap <Leader>k :set cursorcolumn!
 
 " Check if a file has been modified
 noremap <Leader>x :checktime
@@ -230,7 +228,7 @@ inoremap <silent><expr> <Tab>
       \ coc#refresh()
 
 " -----------------------------------------------
-" MacOS clipboard
+" Clipboard notes
 " -----------------------------------------------
 "
 " Nvim has no direct connection to the system clipboard. Instead it is
@@ -247,3 +245,17 @@ inoremap <silent><expr> <Tab>
 " - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
 "
 " Source: https://github.com/neovim/neovim/issues/1696
+
+" -----------------------------------------------
+" vim-commentary and vim-surround
+" -----------------------------------------------
+
+" `gcc` to comment out a line.
+" `gc` for use with a motion or visual mode.
+
+" Inside a quoted block, for example, double quotes, press cs"', to replace
+" with single quotes. Also works with non-quotes; stuff like HTML tags.
+
+" ds" would completely the delimeter.
+
+" cst" would change a HTML tag for a double bracket.
