@@ -175,6 +175,9 @@ noremap <Leader>p :bp
 " Re-format visually highlighted blocks to textwidth
 noremap <Leader>g gq
 
+" Activate Vista
+noremap <Leader>v :Vista!
+
 " -----------------------------------------------
 " vim-markdown
 " -----------------------------------------------
