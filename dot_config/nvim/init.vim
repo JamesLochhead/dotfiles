@@ -1,24 +1,35 @@
-
-"ALE and coc integration, needs to be before plugins
+" ALE and coc integration, needs to be before plugins
 let g:ale_disable_lsp = 1
+
+" Automatic VimPlug installation
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
 
 " -----------------------------------------------
 " Plugins
 " -----------------------------------------------
 
 call plug#begin()
-Plug 'preservim/nerdtree'      		" File navigation in a left pane
-Plug 'vim-airline/vim-airline'		" Nicer bottom status line with git branch
-Plug 'vim-airline/vim-airline-themes'   " Themes for the above
-Plug 'dense-analysis/ale'		" Async linting, code completion, etc
-Plug 'moll/vim-bbye'			" Enables some commands that improve NERDTree
-Plug 'plasticboy/vim-markdown'		" Vim markdown syntax highlighting
-Plug 'godlygeek/tabular'		" Need for vim-markdown table formatting
-Plug 'ParamagicDev/vim-medic_chalk'     " Theme
-Plug 'Xuyuanp/nerdtree-git-plugin'	" Git status in NERDTree
-Plug 'airblade/vim-gitgutter'		" See changes that have been made to a file
-Plug 'tpope/vim-surround'		" Shortcuts for surrounding text with characters
-Plug 'tpope/vim-commentary'		" Shortcuts for commenting out code
+Plug 'preservim/nerdtree'                        " File navigation in a left pane
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }" Nicer bottom status line with git branch
+Plug 'vim-airline/vim-airline-themes'            " Themes for the above
+Plug 'dense-analysis/ale'                        " Async linting, code completion, etc
+Plug 'moll/vim-bbye'                             " Enables some commands that improve NERDTree
+Plug 'plasticboy/vim-markdown'                   " Vim markdown syntax highlighting
+Plug 'godlygeek/tabular'                         " Need for vim-markdown table formatting
+Plug 'ParamagicDev/vim-medic_chalk'              " Theme
+Plug 'Xuyuanp/nerdtree-git-plugin'               " Git status in NERDTree
+Plug 'airblade/vim-gitgutter'                    " See changes that have been made to a file
+Plug 'tpope/vim-surround'                        " Shortcuts for surrounding text with characters
+Plug 'tpope/vim-commentary'                      " Shortcuts for commenting out code
 Plug 'neoclide/coc.nvim', {'branch': 'release'}  " Code completion
 Plug 'pearofducks/ansible-vim'                   " Ansible syntax highlighting
 Plug 'koalaman/shellcheck'                       " Bash/sh linter
@@ -37,7 +48,6 @@ call plug#end()
 
 set number relativenumber                      " Turn on line numbers
 set mouse=a                                    " Turn on mouse mode
-colorscheme flattened_light                    " Set the color scheme
 set nowrap                                     " No word wrapping
 "set autoread                                  " Reload all changed files automatically
 set colorcolumn=80,100                         " Column highlighting
@@ -262,3 +272,7 @@ inoremap <silent><expr> <Tab>
 " ds" would completely the delimeter.
 
 " cst" would change a HTML tag for a double bracket.
+"
+
+" Set the color scheme; needs to be at the bottom for some reason
+colorscheme flattened_light
