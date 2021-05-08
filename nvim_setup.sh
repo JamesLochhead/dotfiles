@@ -1,12 +1,33 @@
 #!/usr/bin/env bash
 
 mkdir -p "$HOME/.config/nvim"
-
-if [ -e "$HOME/.config/nvim/init.vim" ]; then
-	rm -f "$HOME/.config/nvim/init.vim"
-fi
-
 repo_location=$(dirname "$(readlink -f "$0")")
-init_vim_path="$repo_location/dot_config/nvim/init.vim"
 
-ln -s "$init_vim_path" "$HOME/.config/nvim/init.vim"
+# Install init.vim
+init_vim_path_repo="$repo_location/dot_config/nvim/init.vim"
+init_vim_path_app="$HOME/.config/nvim/init.vim"
+
+if [ -e "$init_vim_path_app" ]; then
+	rm -f "$init_vim_path_app"
+fi
+ln -s "$init_vim_path_repo" "$init_vim_path_app"
+
+# Install coc-settings.json
+coc_settings_path_repo="$repo_location/dot_config/nvim/coc-settings.json"
+coc_settings_path_app="$HOME/.config/nvim/coc-settings.json"
+
+if [ -e "$coc_settings_path_app" ]; then
+	rm -f "$coc_settings_path_app"
+fi
+ln -s "$coc_settings_path_repo" "$coc_settings_path_app"
+
+# Install python.vim
+python_vim_path_app="$HOME/.config/nvim/after/syntax/python.vim"
+python_vim_path_repo="$repo_location/dot_config/nvim/after/syntax/python.vim"
+
+mkdir -p "$HOME/.config/nvim/after/syntax"
+
+if [ -e "$python_vim_path_app" ]; then
+	rm -f "$python_vim_path_app"
+fi
+ln -s "$python_vim_path_repo" "$python_vim_path_app"

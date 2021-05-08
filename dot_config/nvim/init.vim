@@ -18,25 +18,25 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 " -----------------------------------------------
 
 call plug#begin()
-Plug 'preservim/nerdtree'                        " File navigation in a left pane
-Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }" Nicer bottom status line with git branch
-Plug 'vim-airline/vim-airline-themes'            " Themes for the above
-Plug 'dense-analysis/ale'                        " Async linting, code completion, etc
-Plug 'moll/vim-bbye'                             " Enables some commands that improve NERDTree
-Plug 'plasticboy/vim-markdown'                   " Vim markdown syntax highlighting
-Plug 'godlygeek/tabular'                         " Need for vim-markdown table formatting
-Plug 'ParamagicDev/vim-medic_chalk'              " Theme
-Plug 'Xuyuanp/nerdtree-git-plugin'               " Git status in NERDTree
-Plug 'airblade/vim-gitgutter'                    " See changes that have been made to a file
-Plug 'tpope/vim-surround'                        " Shortcuts for surrounding text with characters
-Plug 'tpope/vim-commentary'                      " Shortcuts for commenting out code
-Plug 'neoclide/coc.nvim', {'branch': 'release'}  " Code completion
-Plug 'pearofducks/ansible-vim'                   " Ansible syntax highlighting
-Plug 'koalaman/shellcheck'                       " Bash/sh linter
-Plug 'altercation/vim-colors-solarized'          " Solarized theme
-Plug 'romainl/flattened'                         " Alternative to Solarized
-Plug 'thaerkh/vim-indentguides'                  " Indent guides for code blocks
-Plug 'liuchengxu/vista.vim'                      " Python navigation pane. Requries ctags.
+Plug 'preservim/nerdtree'                                          " File navigation in a left pane
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }                 " Nicer bottom status line with git branch
+Plug 'vim-airline/vim-airline-themes'                              " Themes for the above
+Plug 'dense-analysis/ale'                                          " Async linting, code completion, etc
+Plug 'moll/vim-bbye'                                               " Enables some commands that improve NERDTree
+Plug 'plasticboy/vim-markdown'                                     " Vim markdown syntax highlighting
+Plug 'godlygeek/tabular'                                           " Need for vim-markdown table formatting
+"Plug 'ParamagicDev/vim-medic_chalk'                                " Theme
+Plug 'Xuyuanp/nerdtree-git-plugin'                                 " Git status in NERDTree
+Plug 'airblade/vim-gitgutter'                                      " See changes that have been made to a file
+Plug 'tpope/vim-surround'                                          " Shortcuts for surrounding text with characters
+Plug 'tpope/vim-commentary'                                        " Shortcuts for commenting out code
+Plug 'neoclide/coc.nvim', {'branch': 'release'}                    " Code completion
+Plug 'pearofducks/ansible-vim'                                     " Ansible syntax highlighting
+Plug 'koalaman/shellcheck'                                         " Bash/sh linter
+"Plug 'altercation/vim-colors-solarized'                            " Solarized theme
+Plug 'romainl/flattened'                                           " Alternative to Solarized
+Plug 'thaerkh/vim-indentguides'                                    " Indent guides for code blocks
+Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
 call plug#end()
 
 " moll/vim-bbye allows buffers to be closed without closing windows, hence
@@ -239,6 +239,8 @@ inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
+
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-cfn-lint', 'coc-pyright', 'coc-sh', 'coc-yaml']
 
 " -----------------------------------------------
 " Clipboard notes
