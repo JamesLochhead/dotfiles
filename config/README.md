@@ -13,10 +13,3 @@
 | prettier     | npm    |
 | pylint       | pip    |
 | yapf         | pip    |
-
-# Coc
-
-Current Coc extensions are listed in `dot_config/coc/extensions/package.json`.
-
-These are currently installed manually via `:CocInstall EXTENSION1 EXTENSION2`
-within NeoVim.

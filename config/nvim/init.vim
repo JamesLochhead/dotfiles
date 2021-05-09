@@ -240,7 +240,7 @@ inoremap <silent><expr> <Tab>
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
 
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-cfn-lint', 'coc-pyright', 'coc-sh', 'coc-yaml']
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-lint', 'coc-pyright', 'coc-sh', 'coc-yaml', 'coc-swagger']
 
 " -----------------------------------------------
 " Clipboard notes
