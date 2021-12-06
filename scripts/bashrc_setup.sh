@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-repo_location=$(dirname "$(readlink -f "$0")")
+repo_location="$1"
 
 inputrc_path_repo="$repo_location/bashrc"
 inputrc_path_app="$HOME/.bashrc"

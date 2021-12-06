@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p "$HOME/.config/nvim"
-repo_location=$(dirname "$(readlink -f "$0")")
+repo_location="$1"
 
 # Install init.vim
 init_vim_path_repo="$repo_location/config/nvim/init.vim"

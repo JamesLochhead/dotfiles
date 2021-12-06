@@ -120,3 +120,18 @@ fi
 # npm -g installs to .local rather than /usr/local/
 PATH="$HOME/.local/bin:$PATH"
 export npm_config_prefix="$HOME/.local"
+
+complete -C /usr/bin/terraform terraform
+
+# >>>> Vagrant command completion (start)
+. /opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/contrib/bash/completion.sh
+# <<<<  Vagrant command completion (end)
+
+complete -C /usr/bin/packer packer
+export SAM_CLI_TELEMETRY=0
+source /home/james/Git/fedora-35-install/aws-sam-bash-completion.sh
+eval "$(starship init bash)"
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+alias vi=nvim
+alias vim=nvim
