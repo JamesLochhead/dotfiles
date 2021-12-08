@@ -130,6 +130,7 @@ complete -C /usr/bin/terraform terraform
 complete -C /usr/bin/packer packer
 export SAM_CLI_TELEMETRY=0
 source /home/james/Git/fedora-35-install/aws-sam-bash-completion.sh
+PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: $(basename "$PWD")\007"'
 eval "$(starship init bash)"
 export VISUAL=nvim
 export EDITOR="$VISUAL"

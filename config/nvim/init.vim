@@ -54,7 +54,7 @@ set colorcolumn=80,100                         " Column highlighting
 "set textwidth=80                              " Set the width for auto wrapping
 
 " Causing incorrect colours in Byobu:
-"set termguicolors                             " Enable True Color
+set termguicolors                             " Enable True Color
 
 " -----------------------------------------------
 " File-type specific
