@@ -1,6 +1,3 @@
-" ALE and coc integration, needs to be before plugins
-let g:ale_disable_lsp = 1
-
 " Automatic VimPlug installation
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -12,6 +9,9 @@ endif
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
+
+" ALE and coc integration, needs to be before plugins
+let g:ale_disable_lsp = 1
 
 " -----------------------------------------------
 " Plugins
@@ -25,7 +25,7 @@ Plug 'dense-analysis/ale'                                          " Async linti
 Plug 'moll/vim-bbye'                                               " Enables some commands that improve NERDTree
 Plug 'plasticboy/vim-markdown'                                     " Vim markdown syntax highlighting
 Plug 'godlygeek/tabular'                                           " Need for vim-markdown table formatting
-"Plug 'ParamagicDev/vim-medic_chalk'                                " Theme
+"Plug 'ParamagicDev/vim-medic_chalk'                               " Theme
 Plug 'Xuyuanp/nerdtree-git-plugin'                                 " Git status in NERDTree
 Plug 'airblade/vim-gitgutter'                                      " See changes that have been made to a file
 Plug 'tpope/vim-surround'                                          " Shortcuts for surrounding text with characters
@@ -33,10 +33,13 @@ Plug 'tpope/vim-commentary'                                        " Shortcuts f
 Plug 'neoclide/coc.nvim', {'branch': 'release'}                    " Code completion
 Plug 'pearofducks/ansible-vim'                                     " Ansible syntax highlighting
 Plug 'koalaman/shellcheck'                                         " Bash/sh linter
-"Plug 'altercation/vim-colors-solarized'                            " Solarized theme
+"Plug 'altercation/vim-colors-solarized'                           " Solarized theme
 Plug 'romainl/flattened'                                           " Alternative to Solarized
-Plug 'thaerkh/vim-indentguides'                                    " Indent guides for code blocks
+"Plug 'thaerkh/vim-indentguides'                                   " Indent guides for code blocks
+Plug 'nathanaelkane/vim-indent-guides'                             " Indent guides for code blocks
 Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
+Plug 'ntpeters/vim-better-whitespace' 				   " Highlight trailing whitespace
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
 " moll/vim-bbye allows buffers to be closed without closing windows, hence
@@ -66,6 +69,9 @@ filetype plugin on
 
 " Sane tabs for YAML
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" Sane tabs for Terraform
+autocmd FileType tf setlocal ts=2 sts=2 sw=2 expandtab
 
 " foldmethod=syntax just for Python; necessary for docstring folding
 autocmd FileType python setlocal foldenable foldmethod=syntax
@@ -128,6 +134,8 @@ let g:ale_fixers = {
 \ 'json': ['prettier'],
 \ 'sh': ['shfmt'],
 \ 'python': ['yapf'],
+\ 'tf': ['terraform'],
+\ 'tfvars': ['terraform'],
 \}
 
 " -----------------------------------------------
@@ -278,3 +286,20 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 
 " Set the color scheme; needs to be at the bottom for some reason
 colorscheme flattened_light
+
+" -----------------------------------------------
+" Vim indent-guides config
+" -----------------------------------------------
+
+let g:indent_guides_enable_on_vim_startup = 1
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#e0dac7 ctermbg=white
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#fdf6e3 ctermbg=lightgrey
+
+" -----------------------------------------------
+" Fixes
+" -----------------------------------------------
+
+" https://vim.fandom.com/wiki/Accessing_the_system_clipboard
+" CTRL + C yanks to system clipboard.
+
+map <C-c> "+y<CR> 

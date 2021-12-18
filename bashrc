@@ -120,3 +120,29 @@ fi
 # npm -g installs to .local rather than /usr/local/
 PATH="$HOME/.local/bin:$PATH"
 export npm_config_prefix="$HOME/.local"
+
+export EDITOR=nvim
+
+aws_config() {
+	source <(pass aws)
+	output=$(aws sts get-session-token)
+	access_key_id=$(echo "$output" | jq '.Credentials.AccessKeyId' | sed 's/"//g')
+	secret_access_key=$(echo "$output" | jq '.Credentials.SecretAccessKey' | sed 's/"//g')
+	session_token=$(echo "$output" | jq '.Credentials.SessionToken' | sed 's/"//g')
+	export AWS_ACCESS_KEY_ID="$access_key_id"
+	export AWS_SECRET_ACCESS_KEY="$secret_access_key"
+	export AWS_SESSION_TOKEN="$session_token"
+}
+
+mkbash() {
+	if [ ! -e "$1" ]; then
+		touch "$1"
+		chmod u+x "$1"
+		echo '#!/usr/bin/env bash' >> "$1"
+	else
+		echo "$1 already exists"
+	fi
+}
+
+export PATH=/home/james/.local/bin/aws_completer:/home/james/.gem/ruby/2.7.0/bin:$PATH
+complete -C '/home/james/.local/bin/aws_completer' aws
