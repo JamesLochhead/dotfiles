@@ -1,3 +1,7 @@
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" File-top section
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 " ALE and coc integration, needs to be before plugins
 let g:ale_disable_lsp = 1
 
@@ -13,9 +17,9 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugins
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 call plug#begin()
 Plug 'preservim/nerdtree'                                          " File navigation in a left pane
@@ -35,16 +39,25 @@ Plug 'pearofducks/ansible-vim'                                     " Ansible syn
 Plug 'koalaman/shellcheck'                                         " Bash/sh linter
 "Plug 'altercation/vim-colors-solarized'                            " Solarized theme
 Plug 'romainl/flattened'                                           " Alternative to Solarized
-Plug 'thaerkh/vim-indentguides'                                    " Indent guides for code blocks
+Plug 'nathanaelkane/vim-indent-guides'                             " Indent guides for code blocks
 Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
 call plug#end()
+
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: nathanaelkane/vim-indent-guides configuration
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#fdf6e3   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#f7f0dd ctermbg=4
 
 " moll/vim-bbye allows buffers to be closed without closing windows, hence
 " keeping vim open when a buffer needs to be closed. The command is :Bd.
 
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " General options
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 set number relativenumber                      " Turn on line numbers
 set mouse=a                                    " Turn on mouse mode
@@ -56,9 +69,9 @@ set colorcolumn=80,100                         " Column highlighting
 " Causing incorrect colours in Byobu:
 set termguicolors                             " Enable True Color
 
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " File-type specific
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Enable the filetype plugin for extra vim config files.
 " Currently used for automatic Python docstring folding.
@@ -73,9 +86,9 @@ autocmd FileType python setlocal foldenable foldmethod=syntax
 " Set textwidth by file type
 " au BufRead,BufNewFile *.md setlocal textwidth=80
 
-" -----------------------------------------------
-" NERDTree
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: NerdTree
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Shortcut for NERDTree
 map <C-n> :NERDTreeToggle<CR>
@@ -95,9 +108,9 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
-" -----------------------------------------------
-" vim-airline
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: vim-airline
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Show a line for tabs and buffers
 let g:airline#extensions#tabline#enabled = 1
@@ -107,9 +120,9 @@ let g:airline_theme='minimalist'
 
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
-" -----------------------------------------------
-" ALE
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: ALE
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Turn on code completion; turn off if using another source
 " 0 = off
@@ -130,67 +143,73 @@ let g:ale_fixers = {
 \ 'python': ['yapf'],
 \}
 
-" -----------------------------------------------
-" Shortcuts
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: Shortcuts
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Leader = ,
 let mapleader = ","
 
 " ,w = attempt to save with sudo
-noremap <Leader>w :w !sudo tee % > /dev/null
+noremap <Leader>w :w !sudo tee % > /dev/null<cr>
 
 " Prettify JSON with jq
-noremap <Leader>j :%!jq '.'
+noremap <Leader>j :%!jq '.'<cr>
 
 " TableFormat using vim-markdown
-noremap <Leader>t :TableFormat
+noremap <Leader>t :TableFormat<cr>
 
 " ALEFix
-noremap <Leader>f :ALEFix
+noremap <Leader>f :ALEFix<cr>
 
 " Set spelling on
-noremap <Leader>a :set nospell
+noremap <Leader>a :set nospell<cr>
 
 " Turn spelling off
-noremap <Leader>s :set spell spelllang=en_gb
+noremap <Leader>s :set spell spelllang=en_gb<cr>
 
 " Toggle word wrapping
-noremap <Leader>w :set wrap!
+noremap <Leader>w :set wrap!<cr>
 
 " Open init.vim in a new window
-noremap <Leader>i :vert new ~/.config/nvim/init.vim
+noremap <Leader>i :vert new ~/.config/nvim/init.vim<cr>
 
 " windodiff this
-noremap <Leader>d :windo diffthis
+noremap <Leader>d :windo diffthis<cr>
 
 " windodiff this
-noremap <Leader>e :diffoff
+noremap <Leader>e :diffoff<cr>
 
 " Current column highlight
-noremap <Leader>k :set cursorcolumn!
+noremap <Leader>k :set cursorcolumn!<cr>
 
 " Check if a file has been modified
 noremap <Leader>x :checktime
 
 " Current line highlight
-noremap <Leader>l :set cursorline!
+noremap <Leader>l :set cursorline!<cr>
 
 " Next buffer
-noremap <Leader>n :bn
+noremap <Leader>n :bn<cr>
 
 " Previous buffer
-noremap <Leader>p :bp
+noremap <Leader>p :bp<cr>
 
 " Re-format visually highlighted blocks to textwidth
 noremap <Leader>g gq
 
+" Toggle indent guides
+noremap <Leader>y :IndentGuidesToggle<cr>
+
 " Activate Vista
 noremap <Leader>v :Vista!
 
-" -----------------------------------------------
-" vim-markdown
-" -----------------------------------------------
+" Activate init.vim changes
+:noremap <Leader>u :source $MYVIMRC<cr>
+
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: vim-markdown
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Disable vim markdown code folding
 let g:vim_markdown_folding_disabled = 1
@@ -213,9 +232,9 @@ let g:vim_markdown_auto_insert_bullets = 0
 " Disable quote concealing in JSON files
 let g:vim_json_conceal=0
 
-" -----------------------------------------------
-" vim-gitgutter
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: vim-gitgutter
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Make signs appear faster
 set updatetime=100
@@ -225,9 +244,9 @@ highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00  ctermfg=3
 highlight GitGutterDelete guifg=#ff2222  ctermfg=1
 
-" -----------------------------------------------
-" coc
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: coc
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
@@ -242,9 +261,9 @@ inoremap <silent><expr> <Tab>
 
 let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-lint', 'coc-pyright', 'coc-sh', 'coc-yaml', 'coc-swagger']
 
-" -----------------------------------------------
-" Clipboard notes
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Clipboard (notes)
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 "
 " Nvim has no direct connection to the system clipboard. Instead it is
 " accessible through a |provider| which transparently uses shell commands for
@@ -261,9 +280,9 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 "
 " Source: https://github.com/neovim/neovim/issues/1696
 
-" -----------------------------------------------
-" vim-commentary and vim-surround
-" -----------------------------------------------
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: vim-commentary and vim-surround
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " `gcc` to comment out a line.
 " `gc` for use with a motion or visual mode.
@@ -275,6 +294,10 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 
 " cst" would change a HTML tag for a double bracket.
 "
+
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" File-bottom section
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Set the color scheme; needs to be at the bottom for some reason
 colorscheme flattened_light
