@@ -41,6 +41,7 @@ Plug 'koalaman/shellcheck'                                         " Bash/sh lin
 Plug 'romainl/flattened'                                           " Alternative to Solarized
 Plug 'nathanaelkane/vim-indent-guides'                             " Indent guides for code blocks
 Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
+Plug 'ntpeters/vim-better-whitespace' 				   " Show trailing whitespace in red
 call plug#end()
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
