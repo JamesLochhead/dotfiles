@@ -28,6 +28,7 @@ firefox -CreateProfile production-3
 firefox -CreateProfile staging-1
 firefox -CreateProfile staging-2
 firefox -CreateProfile staging-3
+firefox -CreateProfile work-sites
 echo "Sleeping for 10s to let all the Firefox profiles be created..."
 sleep 10
 
@@ -42,6 +43,7 @@ profile_production3=$(find "$HOME/.mozilla/firefox" -maxdepth 1 -iname "*product
 profile_staging1=$(find "$HOME/.mozilla/firefox" -maxdepth 1 -iname "*staging-1*")
 profile_staging2=$(find "$HOME/.mozilla/firefox" -maxdepth 1 -iname "*staging-2*")
 profile_staging3=$(find "$HOME/.mozilla/firefox" -maxdepth 1 -iname "*staging-3*")
+profile_worksites=$(find "$HOME/.mozilla/firefox" -maxdepth 1 -iname "*work-sites*")
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Symlink user.js in profile directories
@@ -54,6 +56,7 @@ ln -sf "$userjs_file" "$profile_production3/user.js"
 ln -sf "$userjs_file" "$profile_staging1/user.js"
 ln -sf "$userjs_file" "$profile_staging2/user.js"
 ln -sf "$userjs_file" "$profile_staging3/user.js"
+ln -sf "$userjs_file" "$profile_worksites/user.js"
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Symlink userChrome.css in profile directories
@@ -66,13 +69,14 @@ mkdir -p "$profile_production3/chrome"
 mkdir -p "$profile_staging1/chrome"
 mkdir -p "$profile_staging2/chrome"
 mkdir -p "$profile_staging3/chrome"
+mkdir -p "$profile_worksites/chrome"
 ln -sf "$userchrome_file" "$profile_james/chrome/userChrome.css"
 ln -sf "$userchrome_file" "$profile_production1/chrome/userChrome.css"
 ln -sf "$userchrome_file" "$profile_production2/chrome/userChrome.css"
 ln -sf "$userchrome_file" "$profile_production3/chrome/userChrome.css"
 ln -sf "$userchrome_file" "$profile_staging1/chrome/userChrome.css"
 ln -sf "$userchrome_file" "$profile_staging2/chrome/userChrome.css"
-ln -sf "$userchrome_file" "$profile_staging3/chrome/userChrome.css"
+ln -sf "$userchrome_file" "$profile_worksites/chrome/userChrome.css"
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Enable Firefox Wayland mode in GNOME environment variables

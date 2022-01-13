@@ -1,8 +1,8 @@
-/* ###################################### 
+/* ######################################
    # GENERAL                            #
    ###################################### */
 
-// restore previous session on startup 
+// restore previous session on startup
 user_pref("browser.startup.page", 3);
 
 // disable warning on quitting multiple tabs when closing
@@ -41,7 +41,8 @@ user_pref("ui.prefersReducedMotion", 0);
 user_pref("apz.frame_delay.enabled", false);
 
 // Zoom fonts, not pages
-user_pref("browser.zoom.full", false);
+user_pref("browser.zoom.full", true);
+// Makes stuff look weird.
 
 /* ###################################### 
    # PERFORMANCE                        #
@@ -95,13 +96,13 @@ user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
 // disable highlights on the new tab page
 user_pref("browser.newtabpage.activity-stream.feeds.section.highlights", false);
 
-// disable Pocket on the new tab page	
+// disable Pocket on the new tab page
 user_pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);
 
 // disable downloads on the new tab page
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads", false);
 
-// disable bookmarks on the new tab page	
+// disable bookmarks on the new tab page
 user_pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks", false);
 
 // disable visited pages on the new tab page
@@ -126,11 +127,10 @@ user_pref("browser.urlbar.suggest.searches", true);
 // hide extra search engines
 // user_pref("browser.search.hiddenOneOffs", "Google,Bing,Amazon.co.uk,Chambers (UK),DuckDuckGo,eBay,Twitter,Wikipedia (en)");
 
-
 // disable auto-update search engines
 user_pref("browser.search.update", false);
 
-/* ###################################### 
+/* ######################################
    # PRIVACY                            #
    ###################################### */
 

@@ -1,3 +1,5 @@
 {
-	"diagnostic.displayByAle": true
+  "diagnostic.displayByAle": true,
+  "snippets.userSnippetsDirectory": "/home/james/Snippets",
+  "git.addGBlameToVirtualText": false
 }

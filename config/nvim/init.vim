@@ -26,7 +26,7 @@ Plug 'preservim/nerdtree'                                          " File naviga
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }                 " Nicer bottom status line with git branch
 Plug 'vim-airline/vim-airline-themes'                              " Themes for the above
 Plug 'dense-analysis/ale'                                          " Async linting, code completion, etc
-Plug 'moll/vim-bbye'                                               " Enables some commands that improve NERDTree
+Plug 'moll/vim-bbye'                                               " Extra buffer delete and wipeout commands
 Plug 'plasticboy/vim-markdown'                                     " Vim markdown syntax highlighting
 Plug 'godlygeek/tabular'                                           " Need for vim-markdown table formatting
 "Plug 'ParamagicDev/vim-medic_chalk'                                " Theme
@@ -42,6 +42,7 @@ Plug 'romainl/flattened'                                           " Alternative
 Plug 'nathanaelkane/vim-indent-guides'                             " Indent guides for code blocks
 Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
 Plug 'ntpeters/vim-better-whitespace' 				   " Show trailing whitespace in red
+Plug 'tpope/vim-fugitive' 					   " Another Git extension
 call plug#end()
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -116,7 +117,7 @@ let NERDTreeDirArrows = 1
 " Show a line for tabs and buffers
 let g:airline#extensions#tabline#enabled = 1
 
-" Theme for vim-airline 
+" Theme for vim-airline
 let g:airline_theme='minimalist'
 
 let g:airline#extensions#tabline#formatter = 'unique_tail'
@@ -142,6 +143,8 @@ let g:ale_fixers = {
 \ 'json': ['prettier'],
 \ 'sh': ['shfmt'],
 \ 'python': ['yapf'],
+\ 'tf': ['terraform fmt'],
+\ 'hcl': ['terraform fmt'],
 \}
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -196,6 +199,9 @@ noremap <Leader>n :bn<cr>
 " Previous buffer
 noremap <Leader>p :bp<cr>
 
+" Close buffer
+noremap <Leader>c :Bdelete<cr>
+
 " Re-format visually highlighted blocks to textwidth
 noremap <Leader>g gq
 
@@ -203,10 +209,26 @@ noremap <Leader>g gq
 noremap <Leader>y :IndentGuidesToggle<cr>
 
 " Activate Vista
-noremap <Leader>v :Vista!
+noremap <Leader>v :Vista!<cr>
 
 " Activate init.vim changes
 :noremap <Leader>u :source $MYVIMRC<cr>
+
+" Edit the snippets for the current filetype
+:noremap <Leader>q :CocCommand snippets.editSnippets<cr>
+
+":StripWhitespace
+":ToggleWhitespace
+
+" Ctrl + hjkl always moves the arrows keys
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+cnoremap <C-h> <Left>
+cnoremap <C-j> <Down>
+cnoremap <C-k> <Up>
+cnoremap <C-l> <Right>
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: vim-markdown
@@ -255,12 +277,15 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-lint', 'coc-pyright', 'coc-sh', 'coc-yaml', 'coc-swagger']
+let g:coc_snippet_next = '<tab>'
+
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-lint', 'coc-pyright', 'coc-sh', 'coc-yaml', 'coc-swagger', 'coc-snippets']
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Clipboard (notes)
@@ -294,7 +319,6 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 " ds" would completely the delimeter.
 
 " cst" would change a HTML tag for a double bracket.
-"
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " File-bottom section
@@ -302,3 +326,4 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 
 " Set the color scheme; needs to be at the bottom for some reason
 colorscheme flattened_light
+highlight ColorColumn  ctermbg=3  guibg=#f7f0dd

@@ -8,17 +8,7 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -72,43 +62,74 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Aliases
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
+alias vi=nvim
+alias vim=nvim
+alias init.vim="nvim ~/.config/nvim/init.vim"
 
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias rm='rm -i'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Binds
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+bind '"\C-o": "git status\r"'
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# $PATH
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# NodeJS/npm
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# npm -g installs to .local rather than /usr/local/
+if command -v npm &> /dev/null; then
+	export npm_config_prefix="$HOME/.local"
+fi
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Command completion
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# Terraform
+if command -v terraform &> /dev/null; then
+	# Generated via: terraform -install-autocomplete
+	complete -C /usr/bin/terraform terraform
+fi
+
+# Packer
+if command -v packer &> /dev/null; then
+	# Generated via: packer -autocomplete-install
+	complete -C /usr/bin/packer packer
+fi
+
+# Vagrant
+# Generated via: vagrant autocomplete install --bash
+. /opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/contrib/bash/completion.sh
+
+# enable bash completion
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -117,22 +138,50 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# npm -g installs to .local rather than /usr/local/
-PATH="$HOME/.local/bin:$PATH"
-export npm_config_prefix="$HOME/.local"
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# AWS SAM - turn off telemetry and add completion
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-complete -C /usr/bin/terraform terraform
+# Stop SAM sending telemetry to AWS
+if command -v sam &> /dev/null; then
+	export SAM_CLI_TELEMETRY=0
+	if [ -e "/home/james/Git/dotfiles/aws-sam-bash-completion.sh" ]; then
+		source /home/james/Git/dotfiles/aws-sam-bash-completion.sh
+	else
+		echo "AWS SAM is installed by the autocomplete is not in the expected location."
+	fi
+fi
 
-# >>>> Vagrant command completion (start)
-. /opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/contrib/bash/completion.sh
-# <<<<  Vagrant command completion (end)
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Prompt
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-complete -C /usr/bin/packer packer
-export SAM_CLI_TELEMETRY=0
-source /home/james/Git/fedora-35-install/aws-sam-bash-completion.sh
-source /etc/profile.d/vte.sh # fix for gnome-terminal opening in pwd
+source /etc/profile.d/vte.sh # fix for gnome-terminal opening in pwd; above starship
 eval "$(starship init bash)"
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Editor setup
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 export VISUAL=nvim
 export EDITOR="$VISUAL"
-alias vi=nvim
-alias vim=nvim
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# History
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# store the history in the persistent file every time a new prompt appears
+PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+
+# the maximum number of commands to remember
+HISTSIZE=10000
+
+# the maximum number of lines in the history file
+HISTFILESIZE=10000
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
