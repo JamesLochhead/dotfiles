@@ -93,12 +93,20 @@ fi
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 bind '"\C-o": "git status\r"'
+bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"'
+
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # $PATH
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+if ! [[ -e "$HOME/.local/bin" ]]; then mkdir -p "$HOME/.local/bin"; fi
+
 PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+
+if [[ -e $HOME/.tfenv/bin ]]; then
+	PATH="$HOME/.tfenv/bin:$PATH"
+fi
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # NodeJS/npm
@@ -163,8 +171,10 @@ eval "$(starship init bash)"
 # Editor setup
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-export VISUAL=nvim
-export EDITOR="$VISUAL"
+if [[ -f /usr/bin/nvim ]]; then
+	export VISUAL=nvim
+	export EDITOR="$VISUAL"
+fi
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # History
