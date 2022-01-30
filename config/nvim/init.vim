@@ -29,7 +29,6 @@ Plug 'dense-analysis/ale'                                          " Async linti
 Plug 'moll/vim-bbye'                                               " Extra buffer delete and wipeout commands
 Plug 'plasticboy/vim-markdown'                                     " Vim markdown syntax highlighting
 Plug 'godlygeek/tabular'                                           " Need for vim-markdown table formatting
-"Plug 'ParamagicDev/vim-medic_chalk'                                " Theme
 Plug 'Xuyuanp/nerdtree-git-plugin'                                 " Git status in NERDTree
 Plug 'airblade/vim-gitgutter'                                      " See changes that have been made to a file
 Plug 'tpope/vim-surround'                                          " Shortcuts for surrounding text with characters
@@ -37,8 +36,7 @@ Plug 'tpope/vim-commentary'                                        " Shortcuts f
 Plug 'neoclide/coc.nvim', {'branch': 'release'}                    " Code completion
 Plug 'pearofducks/ansible-vim'                                     " Ansible syntax highlighting
 Plug 'koalaman/shellcheck'                                         " Bash/sh linter
-"Plug 'altercation/vim-colors-solarized'                            " Solarized theme
-Plug 'romainl/flattened'                                           " Alternative to Solarized
+Plug 'JamesLochhead/flattened'                                     " Current theme
 Plug 'nathanaelkane/vim-indent-guides'                             " Indent guides for code blocks
 Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
 Plug 'ntpeters/vim-better-whitespace' 				   " Show trailing whitespace in red
@@ -67,6 +65,8 @@ set nowrap                                     " No word wrapping
 "set autoread                                  " Reload all changed files automatically
 set colorcolumn=80,100                         " Column highlighting
 "set textwidth=80                              " Set the width for auto wrapping
+" Collapsed folds have no dots at the end:
+set fillchars=fold:\ 
 
 " Causing incorrect colours in Byobu:
 set termguicolors                             " Enable True Color
@@ -125,6 +125,8 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: ALE
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+let g:ale_python_pylint_executable = 'pylint-3'
 
 " Turn on code completion; turn off if using another source
 " 0 = off
@@ -230,6 +232,13 @@ cnoremap <C-j> <Down>
 cnoremap <C-k> <Up>
 cnoremap <C-l> <Right>
 
+" Bind F1 to a function that echoes the Vim syntax being used a the current
+" location. For use with theming.
+" nm <silent> <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
+"     \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name")
+"     \ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
+"     \ . ">"<CR>
+
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: vim-markdown
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -261,11 +270,6 @@ let g:vim_json_conceal=0
 
 " Make signs appear faster
 set updatetime=100
-
-" Override theme colours
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
-highlight GitGutterChange guifg=#bbbb00  ctermfg=3
-highlight GitGutterDelete guifg=#ff2222  ctermfg=1
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: coc
@@ -326,4 +330,3 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 
 " Set the color scheme; needs to be at the bottom for some reason
 colorscheme flattened_light
-highlight ColorColumn  ctermbg=3  guibg=#f7f0dd
