@@ -126,6 +126,8 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 " Plugin: ALE
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+let g:ale_python_pylint_executable = 'pylint-3'
+
 " Turn on code completion; turn off if using another source
 " 0 = off
 let g:ale_completion_enabled = 0

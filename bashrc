@@ -66,6 +66,7 @@ esac
 # Aliases
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+alias gpg-lock="gpgconf --reload gpg-agent"
 alias vi=nvim
 alias vim=nvim
 alias init.vim="nvim ~/.config/nvim/init.vim"
