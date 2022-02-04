@@ -14,6 +14,9 @@
 │   │   ├── coc-settings.json
 │   │   └── init.vim
 │   └── README.md
+├── gnupg
+│   ├── gpg-agent.conf
+│   └── gpg.conf
 ├── inputrc
 ├── install.sh
 ├── LICENSE
@@ -41,9 +44,10 @@
     ├── bashrc_setup.sh
     ├── byobu_setup.sh
     ├── firefox_setup.sh
+    ├── gpg_setup.sh
     ├── inputrc_setup.sh
     └── nvim_setup.sh
 
-13 directories, 30 files
+14 directories, 33 files
 ```
 Note: Automatically generated and overwritten by a git pre-commit hook.
