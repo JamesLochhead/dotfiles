@@ -30,6 +30,7 @@ Plug 'moll/vim-bbye'                                               " Extra buffe
 Plug 'plasticboy/vim-markdown'                                     " Vim markdown syntax highlighting
 Plug 'godlygeek/tabular'                                           " Need for vim-markdown table formatting
 Plug 'Xuyuanp/nerdtree-git-plugin'                                 " Git status in NERDTree
+Plug 'hashivim/vim-terraform' 	 				   " Terraform integration
 Plug 'airblade/vim-gitgutter'                                      " See changes that have been made to a file
 Plug 'tpope/vim-surround'                                          " Shortcuts for surrounding text with characters
 Plug 'tpope/vim-commentary'                                        " Shortcuts for commenting out code
@@ -42,6 +43,17 @@ Plug 'liuchengxu/vista.vim'                                        " Python navi
 Plug 'ntpeters/vim-better-whitespace' 				   " Show trailing whitespace in red
 Plug 'tpope/vim-fugitive' 					   " Another Git extension
 call plug#end()
+
+
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: hashivim/vim-terraform configuration
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+" Run Terraform fmt on save
+let g:terraform_fmt_on_save=1
+
+" 2 space style indentation for TF files
+let g:terraform_align=1
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: nathanaelkane/vim-indent-guides configuration
@@ -145,8 +157,7 @@ let g:ale_fixers = {
 \ 'json': ['prettier'],
 \ 'sh': ['shfmt'],
 \ 'python': ['yapf'],
-\ 'tf': ['terraform fmt'],
-\ 'hcl': ['terraform fmt'],
+\ 'terraform': ['terraform'],
 \}
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
