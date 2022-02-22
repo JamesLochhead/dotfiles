@@ -50,7 +50,7 @@ call plug#end()
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 " Run Terraform fmt on save
-let g:terraform_fmt_on_save=1
+let g:terraform_fmt_on_save=0
 
 " 2 space style indentation for TF files
 let g:terraform_align=1
@@ -98,7 +98,10 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType python setlocal foldenable foldmethod=syntax
 
 " Set textwidth by file type
-" au BufRead,BufNewFile *.md setlocal textwidth=80
+autocmd FileType markdown setlocal textwidth=80
+autocmd FileType markdown setlocal spelllang=en_gb
+autocmd FileType markdown setlocal conceallevel=2
+autocmd FileType markdown setlocal colorcolumn=
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: NerdTree
@@ -158,6 +161,7 @@ let g:ale_fixers = {
 \ 'sh': ['shfmt'],
 \ 'python': ['yapf'],
 \ 'terraform': ['terraform'],
+\ 'html': ['prettier'],
 \}
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

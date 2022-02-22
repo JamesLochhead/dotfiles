@@ -13,7 +13,8 @@
 │   │   │       └── python.vim
 │   │   ├── coc-settings.json
 │   │   └── init.vim
-│   └── README.md
+│   ├── README.md
+│   └── starship.toml
 ├── gnupg
 │   ├── gpg-agent.conf
 │   └── gpg.conf
@@ -23,14 +24,8 @@
 ├── local
 │   └── share
 │       └── applications
-│           ├── firefox.desktop
-│           ├── production-1.desktop
-│           ├── production-2.desktop
-│           ├── production-3.desktop
-│           ├── staging-1.desktop
-│           ├── staging-2.desktop
-│           ├── staging-3.desktop
-│           └── work-sites.desktop
+│           ├── firefox-james.desktop
+│           └── firefox-production.desktop
 ├── Makefile
 ├── mozilla
 │   └── firefox
@@ -46,8 +41,9 @@
     ├── firefox_setup.sh
     ├── gpg_setup.sh
     ├── inputrc_setup.sh
-    └── nvim_setup.sh
+    ├── nvim_setup.sh
+    └── starship_setup.sh
 
-14 directories, 33 files
+14 directories, 29 files
 ```
 Note: Automatically generated and overwritten by a git pre-commit hook.

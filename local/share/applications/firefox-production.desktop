@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
-Name=Staging-1
+Name=Firefox-Production
 GenericName=Web Browser
 Comment=Browse the Web
-Exec=firefox %u -p "staging-1"
+Exec=firefox %u -p "production"
 Icon=firefox
 Terminal=false
 Type=Application

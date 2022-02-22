@@ -66,6 +66,9 @@ esac
 # Aliases
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+alias g="cd ~/Git"
+alias r='cd $(git rev-parse --show-toplevel)'
+alias gl="git log --oneline"
 alias gpg-lock="gpgconf --reload gpg-agent"
 alias vi=nvim
 alias vim=nvim
@@ -94,8 +97,8 @@ fi
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 bind '"\C-o": "git status\r"'
-bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"'
-
+#bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"'
+bind '"\C-p": "git log --oneline\r git rebase -i HEAD~"'
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # $PATH
@@ -103,7 +106,9 @@ bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"
 
 if ! [[ -e "$HOME/.local/bin" ]]; then mkdir -p "$HOME/.local/bin"; fi
 
-PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+export GOPATH="$HOME/.go"
+export GOBIN="$HOME/.go"
+PATH="$HOME/.local/bin:$GOPATH:$GOBIN:$PATH"
 
 if [[ -e $HOME/.tfenv/bin ]]; then
 	PATH="$HOME/.tfenv/bin:$PATH"
