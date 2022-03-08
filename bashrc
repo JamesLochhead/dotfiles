@@ -4,8 +4,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
@@ -22,12 +22,12 @@ shopt -s checkwinsize
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+	debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+xterm-color | *-256color) color_prompt=yes ;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -36,30 +36,30 @@ esac
 #force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
+	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+		# We have color support; assume it's compliant with Ecma-48
+		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+		# a case would tend to support setf rather than setaf.)
+		color_prompt=yes
+	else
+		color_prompt=
+	fi
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
+xterm* | rxvt*)
+	PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+	;;
+*) ;;
+
 esac
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -70,9 +70,20 @@ alias g="cd ~/Git"
 alias r='cd $(git rev-parse --show-toplevel)'
 alias gl="git log --oneline"
 alias gpg-lock="gpgconf --reload gpg-agent"
+alias t='tmp_dir="$(mktemp -d)" && cd $tmp_dir'
 alias vi=nvim
 alias vim=nvim
 alias init.vim="nvim ~/.config/nvim/init.vim"
+
+cl() {
+   cd $1
+   ls -la
+}
+function sts_decode() {
+	aws sts decode-authorization-message --encoded-message "$1" 2>&1 | jq ".DecodedMessage | fromjson" | fx
+}
+
+export -f sts_decode
 
 alias ll='ls -alF'
 alias la='ls -A'
@@ -81,15 +92,15 @@ alias rm='rm -i'
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	alias ls='ls --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
 fi
 
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+	. ~/.bash_aliases
 fi
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -99,6 +110,8 @@ fi
 bind '"\C-o": "git status\r"'
 #bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"'
 bind '"\C-p": "git log --oneline\r git rebase -i HEAD~"'
+bind '"\C-n": "git add -A && git commit -m Squash\r"'
+#bind '"\C-i": "git push origin "'
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # $PATH
@@ -119,7 +132,7 @@ fi
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 # npm -g installs to .local rather than /usr/local/
-if command -v npm &> /dev/null; then
+if command -v npm &>/dev/null; then
 	export npm_config_prefix="$HOME/.local"
 fi
 
@@ -128,13 +141,13 @@ fi
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 # Terraform
-if command -v terraform &> /dev/null; then
+if command -v terraform &>/dev/null; then
 	# Generated via: terraform -install-autocomplete
 	complete -C /usr/bin/terraform terraform
 fi
 
 # Packer
-if command -v packer &> /dev/null; then
+if command -v packer &>/dev/null; then
 	# Generated via: packer -autocomplete-install
 	complete -C /usr/bin/packer packer
 fi
@@ -145,11 +158,11 @@ fi
 
 # enable bash completion
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
 fi
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -157,7 +170,7 @@ fi
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 # Stop SAM sending telemetry to AWS
-if command -v sam &> /dev/null; then
+if command -v sam &>/dev/null; then
 	export SAM_CLI_TELEMETRY=0
 	if [ -e "/home/james/Git/dotfiles/aws-sam-bash-completion.sh" ]; then
 		source /home/james/Git/dotfiles/aws-sam-bash-completion.sh

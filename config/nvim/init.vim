@@ -162,6 +162,7 @@ let g:ale_fixers = {
 \ 'python': ['yapf'],
 \ 'terraform': ['terraform'],
 \ 'html': ['prettier'],
+\ 'css': ['prettier'],
 \}
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
