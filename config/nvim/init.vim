@@ -26,7 +26,7 @@ Plug 'preservim/nerdtree'                                          " File naviga
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.11' }                 " Nicer bottom status line with git branch
 Plug 'vim-airline/vim-airline-themes'                              " Themes for the above
 Plug 'dense-analysis/ale'                                          " Async linting, code completion, etc
-Plug 'moll/vim-bbye'                                               " Extra buffer delete and wipeout commands
+"Plug 'moll/vim-bbye'                                               " Extra buffer delete and wipeout commands
 Plug 'plasticboy/vim-markdown'                                     " Vim markdown syntax highlighting
 Plug 'godlygeek/tabular'                                           " Need for vim-markdown table formatting
 Plug 'Xuyuanp/nerdtree-git-plugin'                                 " Git status in NERDTree
@@ -42,8 +42,25 @@ Plug 'nathanaelkane/vim-indent-guides'                             " Indent guid
 Plug 'liuchengxu/vista.vim'                                        " Python navigation pane. Requries ctags.
 Plug 'ntpeters/vim-better-whitespace' 				   " Show trailing whitespace in red
 Plug 'tpope/vim-fugitive' 					   " Another Git extension
+Plug 'rmagatti/auto-session' 					   " Session manager
+Plug 'JamesLochhead/close-buffers.vim' 				   " Commands to close buffers
+Plug 'vim-scripts/RltvNmbr.vim' 				   " Relative line numbers
 call plug#end()
 
+autocmd BufReadPost * set bufhidden=wipe
+
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+" Plugin: rmagatti/auto-session
+"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+lua << EOF
+local opts = {
+  auto_session_enabled = true,
+}
+
+require('auto-session').setup(opts)
+EOF
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: hashivim/vim-terraform configuration
@@ -71,7 +88,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#f7f0dd ctermbg=4
 " General options
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-set number relativenumber                      " Turn on line numbers
+set number 		                       " Turn on line numbers
 set mouse=a                                    " Turn on mouse mode
 set nowrap                                     " No word wrapping
 "set autoread                                  " Reload all changed files automatically
@@ -124,10 +141,14 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 " Make NerdTree prettier
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let g:NERDTreeWinPos = "left"
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 " Plugin: vim-airline
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+let g:airline#extensions#tabline#formatter = 'short_path'
 
 " Show a line for tabs and buffers
 let g:airline#extensions#tabline#enabled = 1
@@ -148,10 +169,10 @@ let g:ale_python_pylint_executable = 'pylint-3'
 let g:ale_completion_enabled = 0
 
 " Override filetypes for specific paths so linters work
-au BufRead,BufNewFile **/Ansible**.yml set filetype=yaml.ansible
-au BufRead,BufNewFile **/ansible**.yml set filetype=yaml.ansible
-au BufRead,BufNewFile **/cloudformation**.yml set filetype=yaml.cloudformation
-au BufRead,BufNewFile **/Cloudformation**.yml set filetype=yaml.cloudformation
+au BufRead,BufNewFile **.ansible.yaml set filetype=yaml.ansible
+au BufRead,BufNewFile **.ansible.yml set filetype=yaml.ansible
+au BufRead,BufNewFile **.cloudformation.yml set filetype=yaml.cloudformation
+au BufRead,BufNewFile **.cloudformation.yaml set filetype=yaml.cloudformation
 
 " Enabled fixers
 let g:ale_fixers = {
@@ -159,10 +180,17 @@ let g:ale_fixers = {
 \ 'javascript': ['prettier'],
 \ 'json': ['prettier'],
 \ 'sh': ['shfmt'],
-\ 'python': ['yapf'],
+\ 'python': ['black'],
 \ 'terraform': ['terraform'],
 \ 'html': ['prettier'],
 \ 'css': ['prettier'],
+\ 'go': ['gofmt'],
+\}
+
+let g:ale_sh_shfmt_options = '-i 0'
+
+let g:ale_linters_ignore = {
+\   'cloudformation': ['circleci', 'spectral', 'swaglint', 'yamllint'],
 \}
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -194,7 +222,7 @@ noremap <Leader>s :set spell spelllang=en_gb<cr>
 noremap <Leader>w :set wrap!<cr>
 
 " Open init.vim in a new window
-noremap <Leader>i :vert new ~/.config/nvim/init.vim<cr>
+noremap <Leader>i :e ~/.config/nvim/init.vim<cr>
 
 " windodiff this
 noremap <Leader>d :windo diffthis<cr>
@@ -212,13 +240,13 @@ noremap <Leader>x :checktime
 noremap <Leader>l :set cursorline!<cr>
 
 " Next buffer
-noremap <Leader>n :bn<cr>
+"noremap <Leader>n :bn<cr>
 
 " Previous buffer
-noremap <Leader>p :bp<cr>
+"noremap <Leader>p :bp<cr>
 
 " Close buffer
-noremap <Leader>c :Bdelete<cr>
+noremap <Leader>c :Bdelete hidden<cr>
 
 " Re-format visually highlighted blocks to textwidth
 noremap <Leader>g gq
@@ -247,6 +275,18 @@ cnoremap <C-h> <Left>
 cnoremap <C-j> <Down>
 cnoremap <C-k> <Up>
 cnoremap <C-l> <Right>
+
+" Next buffer
+nmap <tab> :bn<cr>
+
+" Previous buffer
+nmap <S-tab> :bp<cr>
+
+" Close buffer
+nmap <Del> :Bdelete this<cr>
+
+" Force close buffer
+nmap <S-Del> :Bdelete! this<cr>
 
 " Bind F1 to a function that echoes the Vim syntax being used a the current
 " location. For use with theming.
@@ -346,3 +386,5 @@ let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-git', 'coc-cfn-l
 
 " Set the color scheme; needs to be at the bottom for some reason
 colorscheme flattened_light
+
+"RltvNmbr
