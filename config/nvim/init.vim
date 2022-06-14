@@ -108,8 +108,11 @@ set termguicolors                             " Enable True Color
 " Currently used for automatic Python docstring folding.
 filetype plugin on
 
-" Sane tabs for YAML
+" YAML
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" Javascript
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
 
 " foldmethod=syntax just for Python; necessary for docstring folding
 autocmd FileType python setlocal foldenable foldmethod=syntax
@@ -267,14 +270,18 @@ noremap <Leader>v :Vista!<cr>
 ":ToggleWhitespace
 
 " Ctrl + hjkl always moves the arrows keys
-inoremap <C-h> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-cnoremap <C-h> <Left>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
-cnoremap <C-l> <Right>
+" inoremap <C-h> <Left>
+" inoremap <C-j> <Down>
+" inoremap <C-k> <Up>
+" inoremap <C-l> <Right>
+" cnoremap <C-h> <Left>
+" cnoremap <C-j> <Down>
+" cnoremap <C-k> <Up>
+" cnoremap <C-l> <Right>
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " Next buffer
 nmap <tab> :bn<cr>

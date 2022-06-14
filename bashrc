@@ -173,114 +173,11 @@ if [[ -f /usr/bin/nvim ]]; then
 	export EDITOR="$VISUAL"
 fi
 
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# Prompt and history
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-set_text_foreground_color() {
-	if [[ $5 == true ]]; then
-		printf "\[\e[0;1;%s;%s;%sm\]$_BOLD%s\[\e[0m\]" "$2" "$3" "$4" "$1"
-	else
-		printf "\[\e[0;1;%s;%s;%sm\]%s\[\e[0m\]" "$2" "$3" "$4" "$1"
-	fi
-}
-
-create_user_tmp_directory() {
-	USER="$(whoami)"
-	PRIMARY_GROUP=$(id -gn "$USER")
-	PERSONAL_TMP_DIR="/tmp/$USER"
-
-	if [[ ! -d "$PERSONAL_TMP_DIR" ]]; then
-		mkdir -p "$PERSONAL_TMP_DIR"
-	fi
-	chmod 700 "$PERSONAL_TMP_DIR"
-	chown -R "$USER:$PRIMARY_GROUP" "$PERSONAL_TMP_DIR"
-}
-
-if [[ -f /tmp/james/base_dir ]]; then
-	cd "$(cat /tmp/james/base_dir)"
-elif [[ -f /tmp/james/recent_dirs ]]; then
-	a
-fi
-
-# Executed every time  a new prompt appears
-prompt_command() {
-
-	ORIGINAL_RETURN_CODE=$? # must be first
-	RETURN_CODE=""
-	if [[ -d /tmp/james ]]; then
-		echo "$(pwd)" >/tmp/james/last_dir
-		TMP_FILE="$(mktemp)"
-		cat /tmp/james/recent_dirs >"$TMP_FILE"
-		echo "$(pwd)" >>"$TMP_FILE"
-		echo "$HOME" >>"$TMP_FILE"
-		sort "$TMP_FILE" | uniq >/tmp/james/recent_dirs
-	fi
-	if ((ORIGINAL_RETURN_CODE != 0)); then
-		RETURN_CODE=" $ORIGINAL_RETURN_CODE"
-	fi
-	history -a # store history
-	_BOLD=$(tput bold)
-	CWD_BASENAME="$(basename $(pwd))"
-	CWD=$(set_text_foreground_color "$CWD_BASENAME" "38" "5" "33" true)
-	GIT_CHECKED_OUT=""
-	GIT_REPOSITORY=""
-	CURRENT_GCLOUD_IDENTITY=""
-	CURRENT_GCLOUD_PROJECT=""
-	AWS_REGION=""
-	GIT_STATUS=""
-
-	if command -v gcloud &>/dev/null; then
-		if [ -n "${CLOUDSDK_CORE_PROJECT:-}" ]; then
-			CURRENT_GCLOUD_PROJECT=" $CLOUDSDK_CORE_PROJECT"
-		elif [[ -f "$HOME/.config/gcloud/configurations/config_default" ]]; then
-			CURRENT_GCLOUD_PROJECT=" $(grep "project" <"$HOME/.config/gcloud/configurations/config_default" | sed 's/project = //' | colrm)"
-		fi
-		if [[ $CURRENT_GCLOUD_PROJECT != "" ]] && [[ $CURRENT_GCLOUD_PROJECT != " " ]]; then
-			CURRENT_GCLOUD_IDENTITY=" $(grep "account" <"$HOME/.config/gcloud/configurations/config_default" | sed 's/account = //' | colrm)"
-		fi
-	fi
-
-	if [ -n "${AWS_DEFAULT_REGION:-}" ]; then
-		AWS_REGION=" $AWS_DEFAULT_REGION"
-	fi
-
-	if command -v git &>/dev/null && [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) == "true" ]]; then
-		#GIT_DETACHED=$(git rev-parse --abbrev-ref --symbolic-full-name HEAD 2> /dev/null)
-		if git status | grep -q detached >/dev/null 2>&1; then
-			GIT_STATUS=" D "
-			GIT_CHECKED_OUT=$(git status | grep detached | sed 's|HEAD detached at ||' 2>/dev/null)
-		else
-			GIT_CHECKED_OUT="$(git branch --show-current | colrm)"
-			if git status --short | grep -q " M " >/dev/null 2>&1 || git status --short | grep -q "?? " >/dev/null 2>&1; then
-				GIT_STATUS=" M "
-			fi
-		fi
-		#GIT_ROOT=$(git rev-parse --show-toplevel)
-		GIT_REPOSITORY="$(basename -s .git "$(git config --get remote.origin.url)")"
-		GIT_OWNER=$(git config --get remote.origin.url | sed 's|/.*||' | sed 's|^.*:||')
-		echo -en "\033]0;G $GIT_REPOSITORY:$GIT_OWNER\a"
-		GIT_REPOSITORY=" $GIT_REPOSITORY:"
-	else
-
-		echo -en "\033]0;D $CWD_BASENAME\a"
-	fi
-	#echo -en "\033]0;D $current_command\a"
-	# echo "${BASH_COMMAND}"
-	# CURRENT_PID=$$
-	# CHILD_PROCESS_PID=$(pgrep -P $CURRENT_PID | head -n1)
-	# if ps -p $CHILD_PROCESS_PID >/dev/null; then
-	# 	process_name=$(ps -p "$CHILD_PROCESS_PID" -o comm=)
-	# 	echo -en "\033]0;D $process_name\a"
-	# fi
-	PS1="\n$CWD$GIT_REPOSITORY$GIT_CHECKED_OUT$GIT_STATUS$CURRENT_GCLOUD_IDENTITY$CURRENT_GCLOUD_PROJECT$AWS_REGION$RETURN_CODE\n> "
-	export PS1
-}
+YABP_DIRECTORY="$HOME/.config/yabp"
+source "$YABP_DIRECTORY/core.sh" "$YABP_DIRECTORY"
 
 # append to the history file, don't overwrite it
 shopt -s histappend
-
-PROMPT_COMMAND=prompt_command
 
 # the maximum number of commands to remember
 HISTSIZE=10000
@@ -302,6 +199,10 @@ export GOBIN="$GOPATH/bin"
 export GOROOT=/usr/lib/golang
 PATH="$HOME/.local/bin:$GOPATH:$GOBIN:$PATH"
 
+# Temporary
+PATH="/home/james/Workspaces/tm352/tools/bin:/home/james/Workspaces/tm352/gradle/gradle-4.3.1/bin:$PATH"
+PATH="/home/james/Workspaces/tm352/platform-tools:/home/james/Workspaces/tm352/emulator:$PATH"
+
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Homebrew
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -314,8 +215,26 @@ if [[ -d "$HOME/.linuxbrew" ]]; then
 	export HOMEBREW_REPOSITORY="$HOME/.linuxbrew"
 	PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
 fi
+
+nix_config() {
+	if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+		source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+	fi
+}
+
+ruby_config() {
+	if command -v ruby &>/dev/null; then
+		export GEM_HOME="$HOME/.gems"
+		export PATH="$HOME/.gems/bin:$PATH"
+		if [[ ! -d "$HOME/.gems/bin" ]]; then
+			mkdir -p "$HOME/.gems/bin"
+		fi
+	fi
+}
+
 main() {
-	create_user_tmp_directory
+	ruby_config
+	nix_config
 }
 
 main "$@"

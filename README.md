@@ -4,9 +4,12 @@
 ├── bashrc
 ├── byobu
 │   ├── color.tmux
+│   ├── profile
 │   ├── profile.tmux
 │   └── status
 ├── config
+│   ├── autostart
+│   │   └── gnome-keyring-ssh.desktop
 │   ├── nvim
 │   │   ├── after
 │   │   │   └── syntax
@@ -38,12 +41,13 @@
 └── scripts
     ├── bashrc_setup.sh
     ├── byobu_setup.sh
+    ├── disable_gnome_ssh_keyring.sh
     ├── firefox_setup.sh
     ├── gpg_setup.sh
     ├── inputrc_setup.sh
     ├── nvim_setup.sh
     └── starship_setup.sh
 
-14 directories, 29 files
+15 directories, 32 files
 ```
 Note: Automatically generated and overwritten by a git pre-commit hook.
