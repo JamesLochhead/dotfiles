@@ -235,6 +235,7 @@ ruby_config() {
 main() {
 	ruby_config
 	nix_config
+	export PATH=$PATH:/home/james/bin
 }
 
 main "$@"
