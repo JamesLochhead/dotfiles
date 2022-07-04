@@ -199,22 +199,18 @@ export GOBIN="$GOPATH/bin"
 export GOROOT=/usr/lib/golang
 PATH="$HOME/.local/bin:$GOPATH:$GOBIN:$PATH"
 
-# Temporary
-PATH="/home/james/Workspaces/tm352/tools/bin:/home/james/Workspaces/tm352/gradle/gradle-4.3.1/bin:$PATH"
-PATH="/home/james/Workspaces/tm352/platform-tools:/home/james/Workspaces/tm352/emulator:$PATH"
+##::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+## Homebrew
+##::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# Homebrew
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-if [[ -d "$HOME/.linuxbrew" ]]; then
-	export HOMEBREW_PREFIX="$HOME/.linuxbrew"
-	export MANPATH="$HOME/.linuxbrew/share/man:"
-	export INFOPATH="$HOME/.linuxbrew/share/info:"
-	export HOMEBREW_CELLAR="$HOME/.linuxbrew/Cellar"
-	export HOMEBREW_REPOSITORY="$HOME/.linuxbrew"
-	PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
-fi
+#if [[ -d "$HOME/.linuxbrew" ]]; then
+#	export HOMEBREW_PREFIX="$HOME/.linuxbrew"
+#	export MANPATH="$HOME/.linuxbrew/share/man:"
+#	export INFOPATH="$HOME/.linuxbrew/share/info:"
+#	export HOMEBREW_CELLAR="$HOME/.linuxbrew/Cellar"
+#	export HOMEBREW_REPOSITORY="$HOME/.linuxbrew"
+#	PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+#fi
 
 nix_config() {
 	if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
