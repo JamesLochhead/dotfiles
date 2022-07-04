@@ -30,8 +30,8 @@ alias jy="yq -P '.' "
 alias yj="yq -o=json '.' "
 alias genpass="openssl rand -base64 "
 
-if [[ -f /usr/share/fzf/shell/key-bindings.bash ]]; then
-	source /usr/share/fzf/shell/key-bindings.bash
+if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash" ]]; then
+	source "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash"
 else
 	echo "fzf keybinding file has moved"
 fi
@@ -56,8 +56,8 @@ if [ -x /usr/bin/dircolors ]; then
 	alias egrep='egrep --color=auto'
 fi
 
-if [ -f ~/.bash_aliases ]; then
-	. ~/.bash_aliases
+if [ -f "$HOME/.bash_aliases" ]; then
+	source "$HOME/.bash_aliases"
 fi
 
 h() {
@@ -83,16 +83,6 @@ bind '"\C-b": "export CLOUDSDK_CORE_PROJECT=$(gcloud projects list --format=yaml
 #bind '"\C-i": "git push origin "'
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# $PATH
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-if ! [[ -e "$HOME/.local/bin" ]]; then mkdir -p "$HOME/.local/bin"; fi
-
-if [[ -e $HOME/.tfenv/bin ]]; then
-	PATH="$HOME/.tfenv/bin:$PATH"
-fi
-
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # NodeJS/npm
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -102,8 +92,10 @@ if command -v npm &>/dev/null; then
 fi
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# Command completion
+# Bash completion
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# kubectl
 
 if command -v kubectl &>/dev/null; then
 	source <(kubectl completion bash)
@@ -121,15 +113,14 @@ if command -v packer &>/dev/null; then
 	complete -C /usr/bin/packer packer
 fi
 
-# Vagrant
-# Generated via: vagrant autocomplete install --bash
-if [[ -f /opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/contrib/bash/completion.sh ]]; then
-	. /opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/contrib/bash/completion.sh
+if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh" ]]; then
+	source "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh"
 else
 	echo "Vagrant completion has moved"
 fi
 
-# enable bash completion
+# Bash
+
 if ! shopt -oq posix; then
 	if [ -f /usr/share/bash-completion/bash_completion ]; then
 		. /usr/share/bash-completion/bash_completion
@@ -138,27 +129,12 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-if [[ -f "$HOME/.linuxbrew/yq" ]]; then
-	source "$HOME/.linuxbrew/yq"
-fi
+# AWS SAM
 
-if [[ -f "$HOME/.linuxbrew/brew" ]]; then
-	source "$HOME/.linuxbrew/brew"
-fi
-
-if [[ -f "$HOME/.linuxbrew/kustomize" ]]; then
-	source "$HOME/.linuxbrew/kustomize"
-fi
-
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# AWS SAM - turn off telemetry and add completion
-#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-# Stop SAM sending telemetry to AWS
 if command -v sam &>/dev/null; then
-	export SAM_CLI_TELEMETRY=0
-	if [ -e "/home/james/Git/dotfiles/aws-sam-bash-completion.sh" ]; then
-		source /home/james/Git/dotfiles/aws-sam-bash-completion.sh
+	export SAM_CLI_TELEMETRY=0 # turn off telemetry
+	if [ -f "$HOME/Personal.Git/dotfiles/bash_completion/aws-sam-bash-completion.sh" ]; then
+		source "$HOME/Personal.Git/bash_completion/bash_completion/dotfiles/aws-sam-bash-completion.sh"
 	else
 		echo "AWS SAM is installed by the autocomplete is not in the expected location."
 	fi
@@ -168,13 +144,10 @@ fi
 # Editor setup
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-if [[ -f /usr/bin/nvim ]]; then
+if command -v nvim &>/dev/null; then
 	export VISUAL=nvim
 	export EDITOR="$VISUAL"
 fi
-
-YABP_DIRECTORY="$HOME/.config/yabp"
-source "$YABP_DIRECTORY/core.sh" "$YABP_DIRECTORY"
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -199,19 +172,6 @@ export GOBIN="$GOPATH/bin"
 export GOROOT=/usr/lib/golang
 PATH="$HOME/.local/bin:$GOPATH:$GOBIN:$PATH"
 
-##::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-## Homebrew
-##::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-#if [[ -d "$HOME/.linuxbrew" ]]; then
-#	export HOMEBREW_PREFIX="$HOME/.linuxbrew"
-#	export MANPATH="$HOME/.linuxbrew/share/man:"
-#	export INFOPATH="$HOME/.linuxbrew/share/info:"
-#	export HOMEBREW_CELLAR="$HOME/.linuxbrew/Cellar"
-#	export HOMEBREW_REPOSITORY="$HOME/.linuxbrew"
-#	PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
-#fi
-
 nix_config() {
 	if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
 		source "$HOME/.nix-profile/etc/profile.d/nix.sh"
@@ -228,10 +188,31 @@ ruby_config() {
 	fi
 }
 
+yabp_config() {
+
+	YABP_DIRECTORY="$HOME/.config/yabp"
+
+	if [[ -d "$HOME/.config/yabp" ]] && [[ -f "$YABP_DIRECTORY/core.sh" ]]; then
+		source "$YABP_DIRECTORY/core.sh" "$YABP_DIRECTORY"
+	fi
+}
+
+path_additions() {
+	export PATH=$HOME/.bin:$HOME/.local/bin:$PATH
+}
+
+create_local_bin() {
+	if ! [[ -d "$HOME/.local/bin" ]]; then
+		mkdir -p "$HOME/.local/bin"
+	fi
+}
+
 main() {
 	ruby_config
 	nix_config
-	export PATH=$PATH:/home/james/bin
+	create_local_bin
+	path_additions
+	yabp_config
 }
 
 main "$@"
