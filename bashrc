@@ -28,7 +28,8 @@ alias vim=nvim
 alias init.vim="nvim ~/.config/nvim/init.vim"
 alias jy="yq -P '.' "
 alias yj="yq -o=json '.' "
-alias genpass="openssl rand -base64 "
+alias genpass="openssl rand -base64"
+alias arnsets='yq ".arnsets[] | select(.name==\"AssumeRoleJamesLochhead\").arnsets" "$HOME/Work.Git/sf-sso-data/arnsets.yaml"'
 
 if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash" ]]; then
 	source "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash"
@@ -104,13 +105,13 @@ fi
 # Terraform
 if command -v terraform &>/dev/null; then
 	# Generated via: terraform -install-autocomplete
-	complete -C /usr/bin/terraform terraform
+	complete -C terraform terraform
 fi
 
 # Packer
 if command -v packer &>/dev/null; then
 	# Generated via: packer -autocomplete-install
-	complete -C /usr/bin/packer packer
+	complete -C packer packer
 fi
 
 if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh" ]]; then
@@ -134,7 +135,7 @@ fi
 if command -v sam &>/dev/null; then
 	export SAM_CLI_TELEMETRY=0 # turn off telemetry
 	if [ -f "$HOME/Personal.Git/dotfiles/bash_completion/aws-sam-bash-completion.sh" ]; then
-		source "$HOME/Personal.Git/bash_completion/bash_completion/dotfiles/aws-sam-bash-completion.sh"
+		source "$HOME/Personal.Git/dotfiles/bash_completion/aws-sam-bash-completion.sh"
 	else
 		echo "AWS SAM is installed by the autocomplete is not in the expected location."
 	fi
@@ -166,11 +167,12 @@ HISTCONTROL=ignoreboth
 # Go
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-export GO111MODULE=on
-export GOPATH="$HOME/Go"
-export GOBIN="$GOPATH/bin"
-export GOROOT=/usr/lib/golang
-PATH="$HOME/.local/bin:$GOPATH:$GOBIN:$PATH"
+go_config() {
+	export GO111MODULE=on
+	export GOPATH="$HOME/.go"
+	export GOBIN="$GOPATH/bin"
+	export GOROOT="/nix/store/bsjw31rkqjc820jlpdyn0c3jv9xxk6pl-user-environment/share/go"
+}
 
 nix_config() {
 	if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
@@ -198,7 +200,7 @@ yabp_config() {
 }
 
 path_additions() {
-	export PATH=$HOME/.bin:$HOME/.local/bin:$PATH
+	export PATH=$HOME/.bin:$GOBIN:$HOME/.local/bin:$PATH
 }
 
 create_local_bin() {
@@ -207,12 +209,20 @@ create_local_bin() {
 	fi
 }
 
+sf_sso_completion() {
+	if command -v sf-sso &>/dev/null; then
+		source <(sf-sso completion bash)
+	fi
+}
+
 main() {
 	ruby_config
 	nix_config
 	create_local_bin
-	path_additions
 	yabp_config
+	sf_sso_completion
+	go_config
+	path_additions # make it last
 }
 
 main "$@"
