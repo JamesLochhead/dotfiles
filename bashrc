@@ -23,8 +23,10 @@ alias r='cd $(git rev-parse --show-toplevel)'
 alias gl="git log --oneline"
 alias gpg-lock="gpgconf --reload gpg-agent"
 alias t='cd $(mktemp -d); export TMP_DIR=$(pwd)'
-alias vi=nvim
-alias vim=nvim
+if command -v nvim &>/dev/null; then
+	alias vi=nvim
+	alias vim=nvim
+fi
 alias init.vim="nvim ~/.config/nvim/init.vim"
 alias jy="yq -P '.' "
 alias yj="yq -o=json '.' "
@@ -74,13 +76,13 @@ h() {
 # Binds
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-bind '"\C-o": "git status\r"'
+#bind '"\C-o": "git status\r"'
 #bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"'
-bind '"\C-p": "git log --oneline\r git rebase -i HEAD~"'
-bind '"\C-n": "git add -A && git commit -m Squash\r"'
-bind '"\C-n": "git add -A && git commit -m Squash\r"'
-bind '"\C-f": "export AWS_DEFAULT_REGION=$(printf \"af-south-1\nap-east-1\nap-northeast-1\nap-northeast-2\nap-northeast-3\nap-south-1\nap-southeast-1\nap-southeast-2\nap-southeast-3\nca-central-1\neu-central-1\neu-north-1\neu-south-1\neu-west-1\neu-west-2\neu-west-3\nme-south-1\nsa-east-1\nus-east-1\nus-east-2\nus-west-1\nus-west-2\" | fzf)\r"'
-bind '"\C-b": "export CLOUDSDK_CORE_PROJECT=$(gcloud projects list --format=yaml | grep projectId | colrm | sed \"s|projectId: ||\" | fzf)\r"'
+#bind '"\C-p": "git log --oneline\r git rebase -i HEAD~"'
+#bind '"\C-n": "git add -A && git commit -m Squash\r"'
+#bind '"\C-n": "git add -A && git commit -m Squash\r"'
+#bind '"\C-f": "export AWS_DEFAULT_REGION=$(printf \"af-south-1\nap-east-1\nap-northeast-1\nap-northeast-2\nap-northeast-3\nap-south-1\nap-southeast-1\nap-southeast-2\nap-southeast-3\nca-central-1\neu-central-1\neu-north-1\neu-south-1\neu-west-1\neu-west-2\neu-west-3\nme-south-1\nsa-east-1\nus-east-1\nus-east-2\nus-west-1\nus-west-2\" | fzf)\r"'
+#bind '"\C-b": "export CLOUDSDK_CORE_PROJECT=$(gcloud projects list --format=yaml | grep projectId | colrm | sed \"s|projectId: ||\" | fzf)\r"'
 #bind '"\C-i": "git push origin "'
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
