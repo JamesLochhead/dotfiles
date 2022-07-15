@@ -33,10 +33,12 @@ alias yj="yq -o=json '.' "
 alias genpass="openssl rand -base64"
 alias arnsets='yq ".arnsets[] | select(.name==\"AssumeRoleJamesLochhead\").arnsets" "$HOME/Work.Git/sf-sso-data/arnsets.yaml"'
 
-if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash" ]]; then
-	source "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash"
-else
-	echo "fzf keybinding file has moved"
+if command -v fzf &>/dev/null; then
+	if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash" ]]; then
+		source "$HOME/Personal.Git/dotfiles/bash_completion/fzf-key-bindings.bash"
+	else
+		echo "fzf keybinding file has moved"
+	fi
 fi
 
 function sts_decode() {
@@ -76,7 +78,7 @@ h() {
 # Binds
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-#bind '"\C-o": "git status\r"'
+bind '"\C-o": "git status\r"'
 #bind '"\C-p": "git add -A && git commit -m \"Latest\" && git push origin main\r"'
 #bind '"\C-p": "git log --oneline\r git rebase -i HEAD~"'
 #bind '"\C-n": "git add -A && git commit -m Squash\r"'
@@ -116,10 +118,12 @@ if command -v packer &>/dev/null; then
 	complete -C packer packer
 fi
 
-if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh" ]]; then
-	source "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh"
-else
-	echo "Vagrant completion has moved"
+if command -v vagrant &>/dev/null; then
+	if [[ -f "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh" ]]; then
+		source "$HOME/Personal.Git/dotfiles/bash_completion/vagrant-bash-completion.sh"
+	else
+		echo "Vagrant completion is not installed"
+	fi
 fi
 
 # Bash
@@ -192,6 +196,7 @@ ruby_config() {
 	fi
 }
 
+
 yabp_config() {
 
 	YABP_DIRECTORY="$HOME/.config/yabp"
@@ -202,6 +207,10 @@ yabp_config() {
 }
 
 path_additions() {
+
+	if [[ -d "/opt/homebrew-$(whoami)/bin" ]]; then
+		export PATH="/opt/homebrew-$(whoami)/bin:$PATH"
+	fi
 	export PATH=$HOME/.bin:$GOBIN:$HOME/.local/bin:$PATH
 }
 
@@ -217,6 +226,33 @@ sf_sso_completion() {
 	fi
 }
 
+homebrew_config() {
+
+	if [[ -d "/opt/homebrew-$(whoami)/bin" ]]; then
+		eval "$(/opt/homebrew-$(whoami)/bin/brew shellenv)"
+	fi
+
+	if type brew &>/dev/null; then
+		HOMEBREW_PREFIX="$(brew --prefix)"
+		if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+		  source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+		else
+		  for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*
+		  do
+		    [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+		  done
+		fi
+	fi
+
+	export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+}
+
+lima_completion() {
+	if command -v limactl &>/dev/null; then
+		source <(limactl completion bash)
+	fi
+}
+
 main() {
 	ruby_config
 	nix_config
@@ -224,6 +260,7 @@ main() {
 	yabp_config
 	sf_sso_completion
 	go_config
+	homebrew_config
 	path_additions # make it last
 }
 

@@ -2,7 +2,5 @@
 
 repo_location="$1"
 
-inputrc_path_repo="$repo_location/bashrc"
-inputrc_path_app="$HOME/.bashrc"
-
-ln -fs "$inputrc_path_repo" "$inputrc_path_app"
+ln -fs "$repo_location/bashrc" "$HOME/.bashrc"
+ln -fs "$repo_location/bash_profile" "$HOME/.bash_profile"
