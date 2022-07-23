@@ -199,9 +199,9 @@ ruby_config() {
 
 yabp_config() {
 
-	YABP_DIRECTORY="$HOME/.config/yabp"
+	YABP_DIRECTORY="$HOME/Personal.Git/Yet-Another-Bash-Prompt"
 
-	if [[ -d "$HOME/.config/yabp" ]] && [[ -f "$YABP_DIRECTORY/core.sh" ]]; then
+	if [[ -d "$YABP_DIRECTORY" ]] && [[ -f "$YABP_DIRECTORY/core.sh" ]]; then
 		source "$YABP_DIRECTORY/core.sh" "$YABP_DIRECTORY"
 	fi
 }
@@ -211,6 +211,11 @@ path_additions() {
 	if [[ -d "/opt/homebrew-$(whoami)/bin" ]]; then
 		export PATH="/opt/homebrew-$(whoami)/bin:$PATH"
 	fi
+
+	if [[ -L "$HOME/.nix-profile" ]]; then
+		export PATH=$HOME/.nix-profile/bin:$PATH
+	fi
+
 	export PATH=$HOME/.bin:$GOBIN:$HOME/.local/bin:$PATH
 }
 
@@ -247,9 +252,17 @@ homebrew_config() {
 	export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
 }
 
-lima_completion() {
+lima_config() {
+
+	export DEV_ENVIRONMENTS_DIR="/Users/sf-james/Personal.Git/lima_dev-environments"
+
+	# Bash completion
 	if command -v limactl &>/dev/null; then
 		source <(limactl completion bash)
+	fi
+
+	if [[ -f "$DEV_ENVIRONMENTS_DIR/bash_commands" ]]; then
+		source "$DEV_ENVIRONMENTS_DIR/bash_commands"
 	fi
 }
 
@@ -261,6 +274,7 @@ main() {
 	sf_sso_completion
 	go_config
 	homebrew_config
+	lima_config
 	path_additions # make it last
 }
 
