@@ -2,7 +2,7 @@
 
 set -Eexuo pipefail
 
-DOT_FILES_REPO_PATH="$HOME/Personal.Git/dotfiles"
+DOT_FILES_REPO_PATH="$1"
 
 main() {
 	create_symlink "$DOT_FILES_REPO_PATH/bashrc" "$HOME/.bashrc"
@@ -33,12 +33,3 @@ create_symlink() {
 }
 
 main "$@"
-
-#
-#current_dir="$(dirname "$(readlink -f "$0")")"
-#cd "$current_dir/scripts/" && bash ./inputrc_setup.sh "$current_dir"
-#cd "$current_dir/scripts/" && bash ./bashrc_setup.sh "$current_dir"
-#cd "$current_dir/scripts/" && bash ./nvim_setup.sh "$current_dir"
-##cd "$current_dir/scripts/" && bash ./firefox_setup.sh "$current_dir"
-#cd "$current_dir/scripts/" && bash ./byobu_setup.sh "$current_dir"
-#cd "$current_dir/scripts/" && bash ./gpg_setup.sh "$current_dir"
